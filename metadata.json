@@ -1,0 +1,5 @@
+{
+  "name": "Neon Snake Evolution",
+  "description": "A high-performance, neon-themed Snake game featuring progressive difficulty, high-score tracking, and responsive controls.",
+  "requestFramePermissions": []
+}
