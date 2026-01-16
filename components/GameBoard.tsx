@@ -19,12 +19,10 @@ const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status }) => {
         gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
       }}
     >
-      {/* Grid Lines */}
       {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => (
-        <div key={i} className="border-[0.5px] border-slate-800/20" />
+        <div key={i} className="border-[0.5px] border-slate-800/10" />
       ))}
 
-      {/* Snake Rendering */}
       {snake.map((segment, index) => {
         const isHead = index === 0;
         return (
@@ -46,7 +44,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status }) => {
         );
       })}
 
-      {/* Food Rendering */}
       <div
         className="absolute bg-rose-500 rounded-full animate-pulse-glow z-20"
         style={{
@@ -54,22 +51,20 @@ const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status }) => {
           height: `${100 / GRID_SIZE}%`,
           left: `${(food.x * 100) / GRID_SIZE}%`,
           top: `${(food.y * 100) / GRID_SIZE}%`,
-          color: '#f43f5e',
         }}
       />
 
-      {/* Overlay for Statuses */}
       {status === GameStatus.PAUSED && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px] z-30">
           <span className="text-4xl font-orbitron font-bold text-cyan-400 drop-shadow-[0_0_10px_#22d3ee]">PAUSED</span>
         </div>
       )}
 
-      {status === GameStatus.IDLE && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] z-30 text-center p-8">
+      {status === GameStatus.READY && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] z-30 text-center">
           <div className="flex flex-col items-center gap-4">
-            <span className="text-2xl font-orbitron font-bold text-white">READY?</span>
-            <p className="text-slate-400 text-sm">USE ARROW KEYS OR SWIPE TO START</p>
+            <span className="text-4xl font-orbitron font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">READY?</span>
+            <p className="text-cyan-400 text-[10px] tracking-[0.3em] font-bold uppercase animate-pulse">PRESS START TO DEPLOY</p>
           </div>
         </div>
       )}
