@@ -58,6 +58,19 @@ export const useGameLoop = () => {
     }));
   }, []);
 
+  const goToHome = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      snake: INITIAL_SNAKE,
+      food: getRandomPoint(INITIAL_SNAKE),
+      direction: INITIAL_DIRECTION as Direction,
+      nextDirection: INITIAL_DIRECTION as Direction,
+      score: 0,
+      status: GameStatus.IDLE,
+      speed: BASE_SPEED,
+    }));
+  }, []);
+
   const togglePause = useCallback(() => {
     setState(prev => ({
       ...prev,
@@ -142,5 +155,5 @@ export const useGameLoop = () => {
     return () => clearInterval(interval);
   }, [state.status, state.speed, moveSnake]);
 
-  return { state, resetGame, togglePause, changeDirection };
+  return { state, resetGame, goToHome, togglePause, changeDirection };
 };

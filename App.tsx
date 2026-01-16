@@ -8,7 +8,7 @@ import { useGameLoop } from './hooks/useGameLoop';
 import { Direction, GameStatus } from './types';
 
 const App: React.FC = () => {
-  const { state, resetGame, togglePause, changeDirection } = useGameLoop();
+  const { state, resetGame, goToHome, togglePause, changeDirection } = useGameLoop();
 
   // Handle Keyboard Inputs
   useEffect(() => {
@@ -93,7 +93,8 @@ const App: React.FC = () => {
         <GameOverModal 
           score={state.score} 
           highScore={state.highScore} 
-          onRestart={resetGame} 
+          onRestart={resetGame}
+          onHome={goToHome}
         />
       )}
 
