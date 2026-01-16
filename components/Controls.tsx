@@ -37,11 +37,22 @@ const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onToggle
             {isPaused ? 'RESUME' : 'PAUSE'}
           </button>
         )}
+        <style>
+          {`
+            @keyframes float {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-5px); }
+            }
+            .animate-float {
+              animation: float 2s ease-in-out infinite;
+            }
+          `}
+        </style>
         <button
           onClick={isReady ? onStart : onReset}
-          className={`flex-1 py-3 rounded-lg font-orbitron font-bold transition-all border bg-slate-900 ${isReady
-              ? 'border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-white animate-pulse shadow-[0_0_15px_#22d3ee]'
-              : 'border-rose-500/50 text-rose-400 hover:bg-rose-500 hover:text-white'
+          className={`flex-1 py-4 rounded-xl font-orbitron font-bold tracking-[0.2em] transition-all border bg-slate-950 ${isReady
+            ? 'border-rose-500 text-rose-500 hover:bg-rose-500/10 shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-float text-xl'
+            : 'border-rose-500/50 text-rose-400 hover:bg-rose-500 hover:text-white'
             }`}
         >
           {status === GameStatus.IDLE ? 'START' : isReady ? 'START' : 'RESTART'}
