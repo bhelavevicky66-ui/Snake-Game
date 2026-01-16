@@ -1,17 +1,17 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { 
-  Point, 
-  Direction, 
-  GameStatus, 
-  GameState 
+import {
+  Point,
+  Direction,
+  GameStatus,
+  GameState
 } from '../types';
-import { 
-  GRID_SIZE, 
-  INITIAL_SNAKE, 
-  INITIAL_DIRECTION, 
-  BASE_SPEED, 
-  MIN_SPEED, 
+import {
+  GRID_SIZE,
+  INITIAL_SNAKE,
+  INITIAL_DIRECTION,
+  BASE_SPEED,
+  MIN_SPEED,
   SPEED_INCREMENT,
   DIRECTIONS_MAP,
   OPPOSITE_DIRECTIONS
@@ -53,8 +53,15 @@ export const useGameLoop = () => {
       direction: INITIAL_DIRECTION as Direction,
       nextDirection: INITIAL_DIRECTION as Direction,
       score: 0,
-      status: GameStatus.PLAYING,
+      status: GameStatus.READY,
       speed: BASE_SPEED,
+    }));
+  }, []);
+
+  const startGame = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      status: GameStatus.PLAYING,
     }));
   }, []);
 
@@ -72,10 +79,13 @@ export const useGameLoop = () => {
   }, []);
 
   const togglePause = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      status: prev.status === GameStatus.PLAYING ? GameStatus.PAUSED : GameStatus.PLAYING,
-    }));
+    setState(prev => {
+      if (prev.status !== GameStatus.PLAYING && prev.status !== GameStatus.PAUSED) return prev;
+      return {
+        ...prev,
+        status: prev.status === GameStatus.PLAYING ? GameStatus.PAUSED : GameStatus.PLAYING,
+      };
+    });
   }, []);
 
   const changeDirection = useCallback((newDir: Direction) => {
@@ -96,9 +106,9 @@ export const useGameLoop = () => {
 
     // Collision check: Wall
     if (
-      newHead.x < 0 || 
-      newHead.x >= GRID_SIZE || 
-      newHead.y < 0 || 
+      newHead.x < 0 ||
+      newHead.x >= GRID_SIZE ||
+      newHead.y < 0 ||
       newHead.y >= GRID_SIZE
     ) {
       handleGameOver();
@@ -155,5 +165,5 @@ export const useGameLoop = () => {
     return () => clearInterval(interval);
   }, [state.status, state.speed, moveSnake]);
 
-  return { state, resetGame, goToHome, togglePause, changeDirection };
+  return { state, resetGame, startGame, goToHome, togglePause, changeDirection };
 };

@@ -9,7 +9,7 @@ import { useGameLoop } from './hooks/useGameLoop';
 import { Direction, GameStatus } from './types';
 
 const App: React.FC = () => {
-  const { state, resetGame, goToHome, togglePause, changeDirection } = useGameLoop();
+  const { state, resetGame, startGame, goToHome, togglePause, changeDirection } = useGameLoop();
 
   // Handle Keyboard Inputs
   useEffect(() => {
@@ -43,8 +43,15 @@ const App: React.FC = () => {
         case ' ':
           if (state.status === GameStatus.IDLE || state.status === GameStatus.GAME_OVER) {
             resetGame();
+          } else if (state.status === GameStatus.READY) {
+            startGame();
           } else {
             togglePause();
+          }
+          break;
+        case 'Enter':
+          if (state.status === GameStatus.READY) {
+            startGame();
           }
           break;
       }
@@ -52,7 +59,7 @@ const App: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [changeDirection, state.status, resetGame, togglePause]);
+  }, [changeDirection, state.status, resetGame, startGame, togglePause]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-start p-4 md:p-8 gap-6 md:gap-10 select-none">
@@ -91,6 +98,7 @@ const App: React.FC = () => {
             onDirectionChange={changeDirection}
             onTogglePause={togglePause}
             onReset={resetGame}
+            onStart={startGame}
           />
 
           {/* Game Over Screen */}

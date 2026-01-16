@@ -7,11 +7,13 @@ interface ControlsProps {
   onDirectionChange: (dir: Direction) => void;
   onTogglePause: () => void;
   onReset: () => void;
+  onStart: () => void;
 }
 
-const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onTogglePause, onReset }) => {
+const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onTogglePause, onReset, onStart }) => {
   const isPlaying = status === GameStatus.PLAYING;
   const isPaused = status === GameStatus.PAUSED;
+  const isReady = status === GameStatus.READY;
 
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-md">
@@ -28,18 +30,21 @@ const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onToggle
       {/* Game Action Buttons */}
       <div className="flex gap-4 w-full px-4">
         {(isPlaying || isPaused) && (
-          <button 
+          <button
             onClick={onTogglePause}
             className="flex-1 py-3 rounded-lg font-orbitron font-bold transition-all border border-cyan-500/50 text-cyan-400 bg-slate-900 hover:bg-cyan-500 hover:text-white"
           >
             {isPaused ? 'RESUME' : 'PAUSE'}
           </button>
         )}
-        <button 
-          onClick={onReset}
-          className="flex-1 py-3 rounded-lg font-orbitron font-bold transition-all border border-rose-500/50 text-rose-400 bg-slate-900 hover:bg-rose-500 hover:text-white"
+        <button
+          onClick={isReady ? onStart : onReset}
+          className={`flex-1 py-3 rounded-lg font-orbitron font-bold transition-all border bg-slate-900 ${isReady
+              ? 'border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-white animate-pulse shadow-[0_0_15px_#22d3ee]'
+              : 'border-rose-500/50 text-rose-400 hover:bg-rose-500 hover:text-white'
+            }`}
         >
-          {status === GameStatus.IDLE ? 'START' : 'RESTART'}
+          {status === GameStatus.IDLE ? 'START' : isReady ? 'START' : 'RESTART'}
         </button>
       </div>
 
@@ -51,7 +56,7 @@ const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onToggle
 };
 
 const ControlButton: React.FC<{ onClick: () => void; icon: string }> = ({ onClick, icon }) => (
-  <button 
+  <button
     onClick={onClick}
     className="w-14 h-14 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl text-white active:scale-90 active:bg-cyan-500 transition-all shadow-lg"
   >
