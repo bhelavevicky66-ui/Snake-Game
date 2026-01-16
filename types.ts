@@ -17,6 +17,7 @@ export enum GameStatus {
   PLAYING = 'PLAYING',
   PAUSED = 'PAUSED',
   GAME_OVER = 'GAME_OVER',
+  COUNTDOWN = 'COUNTDOWN',
 }
 
 export interface GameState {
@@ -28,4 +29,5 @@ export interface GameState {
   highScore: number;
   status: GameStatus;
   speed: number;
+  countdownValue: number;
 }

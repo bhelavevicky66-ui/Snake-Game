@@ -89,6 +89,7 @@ const App: React.FC = () => {
               snake={state.snake}
               food={state.food}
               status={state.status}
+              countdownValue={state.countdownValue}
             />
           </div>
 

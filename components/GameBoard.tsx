@@ -7,11 +7,12 @@ interface GameBoardProps {
   snake: Point[];
   food: Point;
   status: GameStatus;
+  countdownValue?: number;
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status }) => {
+const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status, countdownValue }) => {
   return (
-    <div 
+    <div
       className="relative aspect-square w-full max-w-md bg-slate-900 border-2 border-slate-800 rounded-lg overflow-hidden neon-border shadow-2xl"
       style={{
         display: 'grid',
@@ -28,11 +29,10 @@ const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status }) => {
         return (
           <div
             key={`${segment.x}-${segment.y}-${index}`}
-            className={`absolute transition-all duration-150 rounded-sm ${
-              isHead 
-                ? 'bg-cyan-400 z-10 shadow-[0_0_15px_#22d3ee]' 
+            className={`absolute transition-all duration-150 rounded-sm ${isHead
+                ? 'bg-cyan-400 z-10 shadow-[0_0_15px_#22d3ee]'
                 : 'bg-cyan-600/80 shadow-[0_0_8px_#0891b2]'
-            }`}
+              }`}
             style={{
               width: `${100 / GRID_SIZE}%`,
               height: `${100 / GRID_SIZE}%`,
@@ -57,6 +57,14 @@ const GameBoard: React.FC<GameBoardProps> = ({ snake, food, status }) => {
       {status === GameStatus.PAUSED && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px] z-30">
           <span className="text-4xl font-orbitron font-bold text-cyan-400 drop-shadow-[0_0_10px_#22d3ee]">PAUSED</span>
+        </div>
+      )}
+
+      {status === GameStatus.COUNTDOWN && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] z-40">
+          <span key={countdownValue} className="text-8xl font-orbitron font-black text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.8)] animate-in zoom-in duration-300">
+            {countdownValue}
+          </span>
         </div>
       )}
 

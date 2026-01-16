@@ -13,6 +13,7 @@ interface ControlsProps {
 const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onTogglePause, onReset, onStart }) => {
   const isPlaying = status === GameStatus.PLAYING;
   const isPaused = status === GameStatus.PAUSED;
+  const isCountdown = status === GameStatus.COUNTDOWN;
   const isReady = status === GameStatus.READY;
 
   return (
@@ -29,12 +30,16 @@ const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onToggle
 
       {/* Game Action Buttons */}
       <div className="flex gap-4 w-full px-4">
-        {(isPlaying || isPaused) && (
+        {(isPlaying || isPaused || isCountdown) && (
           <button
             onClick={onTogglePause}
-            className="flex-1 py-3 rounded-lg font-orbitron font-bold transition-all border border-cyan-500/50 text-cyan-400 bg-slate-900 hover:bg-cyan-500 hover:text-white"
+            disabled={isCountdown}
+            className={`flex-1 py-3 rounded-lg font-orbitron font-bold transition-all border border-cyan-500/50 bg-slate-900 ${isCountdown
+              ? 'text-slate-500 cursor-not-allowed opacity-50'
+              : 'text-cyan-400 hover:bg-cyan-500 hover:text-white'
+              }`}
           >
-            {isPaused ? 'RESUME' : 'PAUSE'}
+            {isPaused ? 'RESUME' : isCountdown ? '...' : 'PAUSE'}
           </button>
         )}
         <style>
@@ -51,7 +56,7 @@ const Controls: React.FC<ControlsProps> = ({ status, onDirectionChange, onToggle
         <button
           onClick={isReady ? onStart : onReset}
           className={`flex-1 py-4 rounded-xl font-orbitron font-bold tracking-[0.2em] transition-all border bg-slate-950 ${isReady
-            ? 'border-rose-500 text-rose-500 hover:bg-rose-500/10 shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-float text-xl'
+            ? 'border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-float text-xl'
             : 'border-rose-500/50 text-rose-400 hover:bg-rose-500 hover:text-white'
             }`}
         >

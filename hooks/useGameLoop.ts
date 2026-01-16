@@ -40,6 +40,7 @@ export const useGameLoop = () => {
     highScore: Number(localStorage.getItem('snake-high-score')) || 0,
     status: GameStatus.IDLE,
     speed: BASE_SPEED,
+    countdownValue: 3,
   });
 
   const stateRef = useRef(state);
@@ -55,6 +56,7 @@ export const useGameLoop = () => {
       score: 0,
       status: GameStatus.READY,
       speed: BASE_SPEED,
+      countdownValue: 3,
     }));
   }, []);
 
@@ -75,18 +77,43 @@ export const useGameLoop = () => {
       score: 0,
       status: GameStatus.IDLE,
       speed: BASE_SPEED,
+      countdownValue: 3,
     }));
   }, []);
 
   const togglePause = useCallback(() => {
     setState(prev => {
-      if (prev.status !== GameStatus.PLAYING && prev.status !== GameStatus.PAUSED) return prev;
-      return {
-        ...prev,
-        status: prev.status === GameStatus.PLAYING ? GameStatus.PAUSED : GameStatus.PLAYING,
-      };
+      if (prev.status === GameStatus.PLAYING) {
+        return { ...prev, status: GameStatus.PAUSED };
+      }
+      if (prev.status === GameStatus.PAUSED) {
+        return { ...prev, status: GameStatus.COUNTDOWN, countdownValue: 3 };
+      }
+      return prev;
     });
   }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (state.status !== GameStatus.COUNTDOWN) return;
+
+    let timer: NodeJS.Timeout;
+    if (state.countdownValue > 0) {
+      timer = setTimeout(() => {
+        setState(prev => ({
+          ...prev,
+          countdownValue: prev.countdownValue - 1
+        }));
+      }, 1000);
+    } else {
+      setState(prev => ({
+        ...prev,
+        status: GameStatus.PLAYING
+      }));
+    }
+
+    return () => clearTimeout(timer);
+  }, [state.status, state.countdownValue]);
 
   const changeDirection = useCallback((newDir: Direction) => {
     setState(prev => {
